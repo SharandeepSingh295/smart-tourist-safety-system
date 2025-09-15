@@ -1,0 +1,35 @@
+{
+  "name": "smart-tourist-safety-web",
+  "version": "1.0.0",
+  "description": "Smart Tourist Safety System Web Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo 'Static files ready'",
+    "vercel-build": "echo 'Building for Vercel deployment'"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^8.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "tourist-safety",
+    "web-app",
+    "safety-monitoring",
+    "emergency-response"
+  ],
+  "author": "Smart Tourist Safety Team",
+  "license": "MIT"
+}

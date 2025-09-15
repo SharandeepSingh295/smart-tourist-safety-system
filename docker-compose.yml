@@ -1,0 +1,400 @@
+version: '3.8'
+
+# Smart Tourist Safety System - Docker Compose Configuration
+# This file sets up the complete development environment
+
+services:
+  # ==============================================================================
+  # Database Services
+  # ==============================================================================
+  
+  # PostgreSQL - Primary database for structured data
+  postgres:
+    image: postgres:15-alpine
+    container_name: tourist_safety_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tourist_safety_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - tourist_safety_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MongoDB - Document storage for flexible data
+  mongodb:
+    image: mongo:6.0
+    container_name: tourist_safety_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: dev_password
+      MONGO_INITDB_DATABASE: tourist_safety
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./database/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - tourist_safety_network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/tourist_safety --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis - Caching and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: tourist_safety_redis
+    restart: unless-stopped
+    command: redis-server --requirepass dev_password
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tourist_safety_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "dev_password", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==============================================================================
+  # Backend Services
+  # ==============================================================================
+
+  # API Gateway - Main entry point for all API requests
+  api_gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: tourist_safety_api_gateway
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: dev_password
+      DB_NAME: tourist_safety_db
+      REDIS_HOST: redis
+      REDIS_PASSWORD: dev_password
+      MONGO_URI: mongodb://admin:dev_password@mongodb:27017/tourist_safety?authSource=admin
+      JWT_SECRET: dev_jwt_secret_key_change_in_production
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend/api-gateway:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - tourist_safety_network
+
+  # Authentication Service
+  auth_service:
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    container_name: tourist_safety_auth
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: dev_password
+      DB_NAME: tourist_safety_db
+      REDIS_HOST: redis
+      REDIS_PASSWORD: dev_password
+      JWT_SECRET: dev_jwt_secret_key_change_in_production
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/auth-service:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tourist_safety_network
+
+  # Notification Service
+  notification_service:
+    build:
+      context: ./backend/notification
+      dockerfile: Dockerfile
+    container_name: tourist_safety_notifications
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      REDIS_HOST: redis
+      REDIS_PASSWORD: dev_password
+      MONGO_URI: mongodb://admin:dev_password@mongodb:27017/tourist_safety?authSource=admin
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./backend/notification:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - tourist_safety_network
+
+  # Geolocation Service
+  geo_service:
+    build:
+      context: ./backend/geo-service
+      dockerfile: Dockerfile
+    container_name: tourist_safety_geo
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: dev_password
+      DB_NAME: tourist_safety_db
+      REDIS_HOST: redis
+      REDIS_PASSWORD: dev_password
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./backend/geo-service:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tourist_safety_network
+
+  # ==============================================================================
+  # AI/ML Services
+  # ==============================================================================
+
+  # AI Model Server
+  ai_model_server:
+    build:
+      context: ./ai-modules
+      dockerfile: Dockerfile
+    container_name: tourist_safety_ai_server
+    restart: unless-stopped
+    environment:
+      FLASK_ENV: development
+      FLASK_PORT: 5000
+      MODEL_PATH: /app/models
+      REDIS_HOST: redis
+      REDIS_PASSWORD: dev_password
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./ai-modules:/app
+      - ai_models:/app/models
+    depends_on:
+      - redis
+    networks:
+      - tourist_safety_network
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
+  # TensorFlow Serving (for production ML models)
+  tensorflow_serving:
+    image: tensorflow/serving:2.13.0
+    container_name: tourist_safety_tensorflow_serving
+    restart: unless-stopped
+    environment:
+      MODEL_NAME: safety_model
+    ports:
+      - "8501:8501"  # REST API
+      - "8500:8500"  # gRPC API
+    volumes:
+      - ./ai-modules/models/tensorflow:/models
+    networks:
+      - tourist_safety_network
+
+  # ==============================================================================
+  # Blockchain Services
+  # ==============================================================================
+
+  # Hardhat Node - Local Ethereum blockchain for development
+  hardhat_node:
+    build:
+      context: ./blockchain
+      dockerfile: Dockerfile
+    container_name: tourist_safety_blockchain
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+    ports:
+      - "8545:8545"  # Ethereum RPC
+      - "8546:8546"  # WebSocket
+    volumes:
+      - ./blockchain:/app
+      - /app/node_modules
+    networks:
+      - tourist_safety_network
+    command: npx hardhat node --hostname 0.0.0.0
+
+  # ==============================================================================
+  # Message Queue & Event Streaming
+  # ==============================================================================
+
+  # RabbitMQ - Message queue for async processing
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: tourist_safety_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: dev_password
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - tourist_safety_network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  # ==============================================================================
+  # Monitoring & Observability
+  # ==============================================================================
+
+  # Prometheus - Metrics collection
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: tourist_safety_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - tourist_safety_network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+
+  # Grafana - Metrics visualization
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: tourist_safety_grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: dev_password
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - tourist_safety_network
+    depends_on:
+      - prometheus
+
+  # ==============================================================================
+  # Development Tools
+  # ==============================================================================
+
+  # pgAdmin - PostgreSQL administration tool
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: tourist_safety_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tourist-safety.com
+      PGADMIN_DEFAULT_PASSWORD: dev_password
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - tourist_safety_network
+    profiles:
+      - tools
+
+  # Mongo Express - MongoDB administration tool
+  mongo_express:
+    image: mongo-express:1.0.0
+    container_name: tourist_safety_mongo_express
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: dev_password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:dev_password@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: dev_password
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - tourist_safety_network
+    profiles:
+      - tools
+
+# ==============================================================================
+# Networks
+# ==============================================================================
+
+networks:
+  tourist_safety_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ==============================================================================
+# Volumes
+# ==============================================================================
+
+volumes:
+  postgres_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  ai_models:
+    driver: local

@@ -1,0 +1,553 @@
+# Smart Tourist Safety System - .gitignore
+
+# ==============================================================================
+# Node.js & JavaScript/TypeScript
+# ==============================================================================
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Snowpack dependency directory (https://snowpack.dev/)
+web_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# ==============================================================================
+# Python
+# ==============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ==============================================================================
+# Machine Learning & AI Models
+# ==============================================================================
+
+# TensorFlow
+*.pb
+saved_model/
+*.h5
+*.hdf5
+
+# PyTorch
+*.pth
+*.pt
+
+# Keras
+*.keras
+
+# Model files
+models/
+*.model
+*.pkl
+*.pickle
+
+# Training data and datasets
+data/
+datasets/
+*.csv
+*.tsv
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!*config*.json
+
+# Checkpoints
+checkpoints/
+*.ckpt
+*.checkpoint
+
+# TensorBoard logs
+tensorboard_logs/
+logs/
+
+# Jupyter notebook outputs
+*.ipynb
+
+# ==============================================================================
+# Blockchain & Solidity
+# ==============================================================================
+
+# Hardhat files
+cache/
+artifacts/
+
+# Truffle
+build/
+
+# Ganache
+ganache-cli/
+
+# Account keys (never commit private keys!)
+*.key
+*.keystore
+mnemonic.txt
+private_keys.txt
+
+# Deployment artifacts
+deployments/
+deployment_*.json
+
+# Gas reports
+gas-report.txt
+
+# Coverage reports
+coverage/
+coverage.json
+
+# Slither reports
+slither-report.json
+
+# ==============================================================================
+# React Native
+# ==============================================================================
+
+# OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace/
+
+# Android/IntelliJ
+build/
+.idea/
+.gradle/
+local.properties
+*.iml
+*.hprof
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+!debug.keystore
+
+# Fastlane
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots/
+*/fastlane/test_output/
+
+# Bundle artifacts
+*.jsbundle
+
+# CocoaPods
+ios/Pods/
+
+# React Native Debugger
+react-native-debugger/
+
+# ==============================================================================
+# Database Files
+# ==============================================================================
+
+# SQLite
+*.sqlite
+*.db
+*.db-journal
+
+# PostgreSQL
+*.pgsql
+*.dump
+
+# MongoDB
+*.bson
+
+# Redis dumps
+dump.rdb
+
+# ==============================================================================
+# Environment & Configuration
+# ==============================================================================
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+
+# Configuration files with secrets
+config/secrets.json
+config/production.json
+config/staging.json
+secrets/
+
+# API keys and credentials
+api-keys.json
+credentials.json
+service-account.json
+*.pem
+*.cert
+*.crt
+
+# ==============================================================================
+# Docker & DevOps
+# ==============================================================================
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Vagrant
+.vagrant/
+
+# ==============================================================================
+# IDEs & Editors
+# ==============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Atom
+.atom/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list/
+tramp
+
+# ==============================================================================
+# Cloud & Services
+# ==============================================================================
+
+# AWS
+.aws/
+
+# Google Cloud
+gcp-key.json
+service-account-key.json
+
+# Azure
+.azure/
+
+# ==============================================================================
+# Logs & Temporary Files
+# ==============================================================================
+
+# Log files
+*.log
+logs/
+log/
+
+# Runtime data
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==============================================================================
+# Build & Distribution
+# ==============================================================================
+
+# Build directories
+build/
+dist/
+out/
+
+# Static files (generated)
+static/
+public/build/
+
+# Package files
+*.zip
+*.tar.gz
+*.rar
+
+# ==============================================================================
+# Project Specific
+# ==============================================================================
+
+# Tourist app specific
+tourist-app/android/app/release/
+tourist-app/ios/build/
+
+# AI model outputs
+ai-modules/output/
+ai-modules/trained_models/
+ai-modules/data/raw/
+ai-modules/data/processed/
+
+# Blockchain networks
+blockchain/networks/local/
+blockchain/networks/testnet/
+
+# Configuration overrides
+config/local.json
+config/development.local.json
+
+# Test results
+test-results/
+coverage-reports/
+
+# Generated documentation
+docs/api/
+docs/build/

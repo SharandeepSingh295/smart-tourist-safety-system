@@ -1,0 +1,47 @@
+services:
+  # Backend API Gateway
+  - type: web
+    name: smart-tourist-safety-api
+    env: node
+    buildCommand: cd backend/api-gateway && npm install
+    startCommand: cd backend/api-gateway && npm start
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: smart-tourist-safety-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: smart-tourist-safety-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: smart-tourist-safety-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: smart-tourist-safety-db
+          property: database
+    
+  # PostgreSQL Database
+  - type: pserv
+    name: smart-tourist-safety-db
+    env: postgresql
+    plan: free
+    ipAllowList: []
+    databaseName: tourist_safety_db
+    databaseUser: postgres
+
+  # Redis Instance
+  - type: redis
+    name: smart-tourist-safety-redis
+    plan: free
+    ipAllowList: []

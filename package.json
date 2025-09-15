@@ -1,0 +1,116 @@
+{
+  "name": "smart-tourist-safety-system",
+  "version": "1.0.0",
+  "description": "AI-powered tourist safety monitoring and incident response system with geo-fencing and blockchain-based digital identity",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/api-gateway/server.js",
+    "web": "node frontend/web/server.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\" \"npm run dev:blockchain\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:web": "node frontend/web/server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:blockchain": "cd blockchain && npx hardhat node",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "test": "npm run test:backend && npm run test:frontend && npm run test:blockchain",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:blockchain": "cd blockchain && npx hardhat test",
+    "test:ai": "cd ai-modules && python -m pytest",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
+    "format": "prettier --write \"**/*.{js,ts,jsx,tsx,json,css,md}\"",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "setup": "npm install && npm run setup:backend && npm run setup:frontend && npm run setup:blockchain",
+    "setup:backend": "cd backend && npm install",
+    "setup:frontend": "cd frontend && npm install",
+    "setup:blockchain": "cd blockchain && npm install",
+    "deploy:staging": "npm run build && npm run deploy:backend:staging && npm run deploy:frontend:staging",
+    "deploy:production": "npm run build && npm run deploy:backend:production && npm run deploy:frontend:production",
+    "migrate:db": "cd backend && npm run migrate",
+    "seed:db": "cd backend && npm run seed"
+  },
+  "keywords": [
+    "tourist-safety",
+    "ai",
+    "machine-learning",
+    "geo-fencing",
+    "blockchain",
+    "digital-identity",
+    "incident-response",
+    "emergency-management",
+    "location-tracking",
+    "security",
+    "react-native",
+    "nodejs",
+    "solidity",
+    "ethereum"
+  ],
+  "author": {
+    "name": "Smart Tourist Safety Team",
+    "email": "contact@tourist-safety.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/smart-tourist-safety-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/smart-tourist-safety-system/issues"
+  },
+  "homepage": "https://github.com/your-org/smart-tourist-safety-system#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "concurrently": "^8.2.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1"
+  },
+  "workspaces": [
+    "backend/*",
+    "frontend/*",
+    "blockchain"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "volta": {
+    "node": "18.18.0",
+    "npm": "9.8.1"
+  }
+}
