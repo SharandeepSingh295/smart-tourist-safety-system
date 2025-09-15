@@ -3,7 +3,7 @@
 // API Base URL - Environment aware
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3001/api'  // Local development
-    : 'https://smart-tourist-safety-api.onrender.com/api';  // Production API
+    : 'https://smart-tourist-safety-api.onrender.com/api';  // Production API - Update this URL after deployment
 
 // Global variables
 let currentUser = null;
