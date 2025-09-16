@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tourist Safety System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Smart Tourist Safety</h1>
+            </div>
+            <nav class="nav">
+                <a href="#dashboard" class="nav-link active">Dashboard</a>
+                <a href="#map" class="nav-link">Safety Map</a>
+                <a href="#alerts" class="nav-link">Alerts</a>
+                <a href="#profile" class="nav-link">Profile</a>
+                <button class="emergency-btn" onclick="triggerEmergency()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    EMERGENCY
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="dashboard">
+                <div class="welcome-section">
+                    <h2>Welcome to Your Safety Dashboard</h2>
+                    <p class="status-text">Current Status: <span id="status" class="status-safe">SAFE</span></p>
+                </div>
+
+                <!-- Safety Status Card -->
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>Area Safety Analysis</h3>
+                            <p id="location-name">Current Location: New York, NY</p>
+                            <div class="risk-meter">
+                                <div class="risk-label">Risk Level</div>
+                                <div class="risk-bar">
+                                    <div class="risk-fill" style="width: 25%"></div>
+                                </div>
+                                <div class="risk-value">25% - LOW RISK</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="shareLocation()">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Share Location
+                        </button>
+                        <button class="action-btn" onclick="reportIncident()">
+                            <i class="fas fa-flag"></i>
+                            Report Incident
+                        </button>
+                        <button class="action-btn" onclick="findSafeRoute()">
+                            <i class="fas fa-route"></i>
+                            Safe Route
+                        </button>
+                        <button class="action-btn" onclick="emergencyContacts()">
+                            <i class="fas fa-phone"></i>
+                            Emergency Contacts
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Alerts -->
+                <div class="alerts-section">
+                    <h3>Recent Safety Alerts</h3>
+                    <div class="alerts-list" id="alerts-list">
+                        <div class="alert-item low">
+                            <div class="alert-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Crowded Area Detected</h4>
+                                <p>Times Square area experiencing high foot traffic</p>
+                                <span class="alert-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item medium">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Construction Zone</h4>
+                                <p>Temporary construction work near Central Park</p>
+                                <span class="alert-time">15 minutes ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Map Section -->
+                <div class="map-section">
+                    <h3>Live Safety Map</h3>
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <i class="fas fa-map"></i>
+                            <p>Interactive safety map with real-time threat detection</p>
+                            <button class="btn-primary" onclick="loadFullMap()">View Full Map</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Emergency Modal -->
+    <div id="emergency-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header emergency">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>EMERGENCY ALERT</h2>
+            </div>
+            <div class="modal-body">
+                <p>Are you in immediate danger and need emergency assistance?</p>
+                <div class="emergency-options">
+                    <button class="btn-danger" onclick="sendEmergencyAlert()">
+                        <i class="fas fa-ambulance"></i>
+                        YES - SEND ALERT
+                    </button>
+                    <button class="btn-secondary" onclick="closeModal()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Smart Tourist Safety System. Keeping travelers safe worldwide.</p>
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#support">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
